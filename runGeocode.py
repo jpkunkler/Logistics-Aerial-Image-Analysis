@@ -6,12 +6,10 @@ Created on Fri Mar 22 14:06:50 2019
 @author: kunkler
 """
 import pandas as pd
-import numpy as np
 import geocoder
 
 def arcgisGeocode(excel_file):
     df = pd.read_excel(excel_file)
-    print(np.where(pd.isnull(df["Lat"])))
     
     df_new = df[df.isnull().any(axis=1)]
     
@@ -29,3 +27,9 @@ def arcgisGeocode(excel_file):
     df.update(df_new)
     df.to_excel(excel_file)
     print("Finished Geocoding!")
+    
+
+def main():
+    arcgisGeocode(r"Standorte.xlsx")
+    
+if __name__ == '__main__':  main()

@@ -9,7 +9,7 @@ Created on Fri Mar 22 13:23:36 2019
 import BoundingBox as bb
 import pandas as pd
 import subprocess
-import runGeocode as geocode
+import runGeocode as gc
 
 def main():
     
@@ -21,7 +21,7 @@ def main():
     # Check if any rows need geocoding
     if df["Lat"].isnull().values.any() or df["Lon"].isnull().values.any():
         print("Empty Coordinate Values found. Starting Geocoding Process!")
-        geocode.arcgisGeocode(excel_file)
+        gc.arcgisGeocode(excel_file)
         df = pd.read_excel(excel_file) # reload updated dataset
         
     # Go through dataset row by row
@@ -35,7 +35,7 @@ def main():
         p.wait()
         
         # Update values in dataframe aka Excel Sheet
-        df.loc[index, 'Bilddatei'] = "Test"
+        #df.loc[index, 'Bilddatei'] = "FULL-PATH-TO-FILE-HERE"
         print("Proceeding to next row. Please stand bye.")
     
     # Save dataframe back to Excel as Excel Sheet

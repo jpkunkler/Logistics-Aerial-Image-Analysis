@@ -6,20 +6,19 @@ Created on Fri Mar 22 13:23:36 2019
 @author: kunkler
 """
 
-import BoundingBox as bb
 import pandas as pd
 import subprocess
 import runGeocode as gc
-from GoogleMapsDownloader import GoogleMapDownloader
-import datetime
-import time
+import os
+
+OUTPUT_DIR = r"./output/"
 
 def main():
     
     excel_file = r"Standorte.xlsx"
     
     df = pd.read_excel(excel_file)
-    script = r"Satellite-Aerial-Image-Retrieval-by-llgeek/aerialImageRetrieval.py"
+    script = r"Bing-Aerial-API/imageRetrieval.py"
     
     # Check if any rows need geocoding
     if df["Lat"].isnull().values.any() or df["Lon"].isnull().values.any():
@@ -30,11 +29,10 @@ def main():
     # Go through dataset row by row
     for index, row in df.iterrows():
         
-        # calculate bounding box
-        upper_left, lower_right = bb.boundingBox(row["Lat"], row["Lon"])
+        out_path = os.path.join(OUTPUT_DIR, row["Kategorie"])
         
         # run satellite image retrieval script
-        p = subprocess.Popen(['python', script, str(upper_left[0]), str(upper_left[1]), str(lower_right[0]), str(lower_right[1])])
+        p = subprocess.Popen(['python', script, str(row["Lat"]), str(row["Lon"]), out_path])
         p.wait()
         
         # Update values in dataframe aka Excel Sheet

@@ -10,6 +10,9 @@ import BoundingBox as bb
 import pandas as pd
 import subprocess
 import runGeocode as gc
+from GoogleMapsDownloader import GoogleMapDownloader
+import datetime
+import time
 
 def main():
     
@@ -37,7 +40,25 @@ def main():
         # Update values in dataframe aka Excel Sheet
         #df.loc[index, 'Bilddatei'] = "FULL-PATH-TO-FILE-HERE"
         print("Proceeding to next row. Please stand bye.")
-    
+        
+# ------------------- GOOGLE MAPS PART
+#        gmd = GoogleMapDownloader(row["Lat"], row["Lon"], 15)
+#        print("The tile coorindates are {}".format(gmd.getXY()))
+#
+#        try:
+#            # Get the high resolution image
+#            img = gmd.generateImage()
+#        except IOError:
+#            print("Could not generate the image for {} - try adjusting the zoom level and checking your coordinates".format(row["Straße"]))
+#        else:
+#            # Save the image to disk
+#            date_string = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M:%S")
+#            img.save("./output/{}_{}.png".format(row["Straße"],date_string))
+#            print("The map has successfully been created")
+#            
+#        time.sleep(5)
+# ------------------- END GOOGLE MAPS PART
+        
     # Save dataframe back to Excel as Excel Sheet
     df.to_excel(excel_file)
     print("Finished!")

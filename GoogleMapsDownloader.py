@@ -103,7 +103,7 @@ class GoogleMapDownloader:
 
 def main():
     # Create a new instance of GoogleMap Downloader
-    gmd = GoogleMapDownloader(49.005873, 12.114089, 19)
+    gmd = GoogleMapDownloader(49.0058769141618,	12.1141365986488, 19)
 
     print("The tile coorindates are {}".format(gmd.getXY()))
 

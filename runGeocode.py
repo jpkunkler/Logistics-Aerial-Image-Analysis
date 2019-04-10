@@ -13,7 +13,7 @@ def arcgisGeocode(excel_file):
     
     df_new = df[df.isnull().any(axis=1)]
     
-    
+    counter = 0
     for index, row in df_new.iterrows():
         # geocode address strings to coordinate pairs
         g = geocoder.arcgis(str(row["PLZ"]) + "," + " " + row["Straße"] + "," + "Germany")
@@ -21,7 +21,12 @@ def arcgisGeocode(excel_file):
         # Update values in dataframe aka Excel Sheet
         df_new.loc[index, 'Lat'] = g.json["lat"]
         df_new.loc[index, 'Lon'] = g.json["lng"]
-        print("Proceeding to next row. Please stand bye.")
+        #print("Proceeding to next row. Please stand bye.")
+        counter += 1
+        if counter % 50 == 0:
+            df.update(df_new)
+            df.to_excel(excel_file)
+            print("Saved after {} locations.".format(counter))
     
     # Save dataframe back to Excel as Excel Sheet
     df.update(df_new)

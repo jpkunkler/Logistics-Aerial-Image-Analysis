@@ -31,6 +31,8 @@ def main():
         
         out_path = os.path.join(OUTPUT_DIR, row["Kategorie"])
         
+        
+        #!!!!!!!!!!!! CHANGE TO CALL FUNCTION DIRECTLY --> import !!!!!!!!!!
         # run satellite image retrieval script
         p = subprocess.Popen(['python', script, str(row["Lat"]), str(row["Lon"]), out_path])
         p.wait()

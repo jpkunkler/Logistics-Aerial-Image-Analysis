@@ -9,7 +9,7 @@ driver = webdriver.Firefox(executable_path=r'/opt/geckodriver')
 
 BASE_URL = "https://www.google.com/maps/@?api=1&map_action=map&center={lat},{lng}&zoom=12&basemap=satellite"
 INPUT_FILE = r"Standorte_labeled.xlsx"
-OUTPUT_FILE = r"Standorte_labeled_v0.1.xlsx"
+OUTPUT_FILE = r"Standorte_labeled.xlsx"
 
 class MyClass:
     def __init__(self, master):
@@ -32,6 +32,9 @@ class MyClass:
             self.button_bad = Button(frame, text="Schlecht", command=self.label_bad)
             self.button_bad.pack(side='left')
            
+            self.button_mark = Button(frame, text="Mark", command=self.mark)
+            self.button_mark.pack(side='left')
+            
             self.button_next = Button(frame, text="Exit", command=self.finish)
             self.button_next.pack(side='left')
         
@@ -60,6 +63,10 @@ class MyClass:
     
     def label_bad(self, _event=None):
         self.label("Schlecht")
+    
+    def mark(self, _event=None):
+        self.df.iloc[self.counter, self.df.columns.get_loc("Markiert")] = "x"
+        self.save()
         
     def next_row(self, _event=None):
         self.counter += 1

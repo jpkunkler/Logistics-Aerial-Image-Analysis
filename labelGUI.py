@@ -5,7 +5,8 @@ import sys
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-driver = webdriver.Firefox(executable_path=r'/opt/geckodriver')
+#driver = webdriver.Firefox(executable_path=r'/opt/geckodriver') # UBUNTU
+driver = webdriver.Firefox(executable_path=r'C:\git\geckodriver') # WINDOWS
 
 BASE_URL = "https://www.google.com/maps/@?api=1&map_action=map&center={lat},{lng}&zoom=12&basemap=satellite"
 INPUT_FILE = r"Standorte_labeled.xlsx"

@@ -1,12 +1,12 @@
 # from tkinter import Button, Frame, Tk  # Python 3
-from tkinter import Button, Frame, Tk    # Python 2
+from tkinter import Button, Frame, Tk, Label, StringVar    # Python 2
 import pandas as pd
 import sys
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-#driver = webdriver.Firefox(executable_path=r'/opt/geckodriver') # UBUNTU
-driver = webdriver.Firefox(executable_path=r'C:\git\geckodriver') # WINDOWS
+driver = webdriver.Firefox(executable_path=r'/opt/geckodriver') # UBUNTU
+#driver = webdriver.Firefox(executable_path=r'C:\git\geckodriver') # WINDOWS
 
 BASE_URL = "https://www.google.com/maps/@?api=1&map_action=map&center={lat},{lng}&zoom=12&basemap=satellite"
 INPUT_FILE = r"Standorte_labeled.xlsx"
@@ -14,12 +14,17 @@ OUTPUT_FILE = r"Standorte_labeled.xlsx"
 
 class MyClass:
     def __init__(self, master):
+        self.status_text = StringVar()
         self.openFile()
         frame = Frame(master)
         frame.pack()
         self.next_row()
-    
+        
+        self.status_text.set("{}/{}".format(self.counter, self.total_rows))
+        
         try:
+            self.lbl_counter = Label(frame, textvariable=self.status_text)
+            self.lbl_counter.pack()
             
             self.button_very_good = Button(frame, text="Sehr Gut", command=self.label_very_good)
             self.button_very_good.pack(side='left')
@@ -78,13 +83,16 @@ class MyClass:
             elem.clear()
             elem.send_keys("{},{}".format(lat,lng))
             elem.send_keys(Keys.RETURN)
+            self.status_text.set("{}/{}".format(self.counter, self.total_rows))
+            root.update_idletasks()
         except IndexError as e:
             print("Arrived at last line!", e)
             self.finish()
         
     def openFile(self):
         self.filename = INPUT_FILE
-        self.df = pd.read_excel(self.filename)
+        self.df = pd.read_excel(self.filename, index_col=0)
+        self.total_rows = len(self.df.index)
         try:
             self.counter = self.df["Kategorie"].last_valid_index()
             if self.counter == None:
@@ -101,7 +109,7 @@ class MyClass:
         root.destroy()
         driver.quit()
 
-driver.get(BASE_URL.format(lat="48.999940", lng="12.094889"))
+driver.get(BASE_URL.format(lat="48.999940", lng="12.094889")) # initialize Map at Regensburg
 
 root = Tk()
 abc = MyClass(root)

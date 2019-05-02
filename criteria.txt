@@ -1,26 +1,28 @@
 
 Sehr gut:
-> außerhalb gelegen
+> außerhalb gelegen (keine Umweltzonen etc.)
 > große Standorte (Zentrallager, Distributionszentren)
 > gute Straßenanbindung (breit, ausgebaut)
 > viel Wendefläche (Parkplatz etc)
 > viel "grüne", unbebaute Fläche im Umkreis
+> viele weitere große potenzielle Kunden für Tourenbildung
 
 gut:
-> gute Straßenanbindung (Breit, Autobahnnähe)
 > innerhalb gelegen (Gewerbegebiet) - größere Filialen
+> gute Straßenanbindung (Breit, Autobahnnähe)
 > breite Zufahrt
 > wenig Wohnfläche in direkter Umgebung
+> weitere potenzielle Kunden für Tourenbildung in direkter Umgebung
 
 mittel:
-> moderate Straßenanbindung (kleine bis mittlere Straßen)
 > Moderat bebaute Wohngebiete/Stadtrand
+> moderate Straßenanbindung (kleine bis mittlere Straßen)
 > mittlere bis größere Filialen
 > Schlechte Park/Wendesituation
 
 schlecht:
-> Innenstadtlage - Wohngebiet - viele Familienhäuser
+> Innenstadtlage - Einkaufspassagen - Wohngebiet - viele Familienhäuser
 > kleine, enge Straßen
 > kleine Schaufensterfilialen
 > einspurige Straßen - Einbahnstraßen
-> 
+> kaum weitere Filialen für Tourenbildung in direkter Umgebung

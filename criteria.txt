@@ -26,3 +26,29 @@ schlecht:
 > kleine Schaufensterfilialen
 > einspurige Straßen - Einbahnstraßen
 > kaum weitere Filialen für Tourenbildung in direkter Umgebung
+
+####################
+
+# Kategorie SCHLECHT
+Wenn landuse=residential > landuse=commercial oder industrial --> schlecht
+Wenn Anzahl Gebäude (building=yes) > 100 --> schlecht
+Wenn highway=tertiary is None or highway=secondary is None or highway=primary is None --> schlecht
+
+
+
+
+# Kategorie MODERAT
+Wenn Anzahl Gebäude <= 100 AND Anzahl Gebäude > 50 --> moderat
+Wenn highway=tertiary in 200 Metern Luftlinie
+
+
+
+# Kategorie GUT
+
+
+# Kategorie SEHR GUT
+# Gewerbegebiet Check
+Wenn im Kartenausschnitt mehr Gewerbegebiet als Wohngebiet existiert --> sehr gut
+Wenn Autobahnkreuz in 100 Metern Luftlinie vorhanden --> sehr gut
+Wenn Anbindung an Tertiäres oder Sekundäres oder Primäres Straßensystem im Umkreis von 100 Metern vorhanden --> sehr gut
+Wenn Warenhaus in Kartenausschnitt vorhanden --> sehr gut

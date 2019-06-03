@@ -15,21 +15,24 @@ OUTPUT_DIR = r"./output/"
 
 def main():
     
-    excel_file = r"Standorte.xlsx"
+    data_folder = r"./data/"
+    excel_file = r"data_sample.xlsx"
     
-    df = pd.read_excel(excel_file)
-    script = r"Bing-Aerial-API/imageRetrieval.py"
+    file = os.path.join(data_folder, excel_file)
+    
+    df = pd.read_excel(file)
+    script = r"Bing_Aerial_API/imageRetrieval.py"
     
     # Check if any rows need geocoding
     if df["Lat"].isnull().values.any() or df["Lon"].isnull().values.any():
         print("Empty Coordinate Values found. Starting Geocoding Process!")
-        gc.arcgisGeocode(excel_file)
-        df = pd.read_excel(excel_file) # reload updated dataset
+        gc.arcgisGeocode(file)
+        df = pd.read_excel(file) # reload updated dataset
         
     # Go through dataset row by row
     for index, row in df.iterrows():
         
-        out_path = os.path.join(OUTPUT_DIR, row["Kategorie"])
+        out_path = os.path.join(OUTPUT_DIR, row["class"])
         
         
         #!!!!!!!!!!!! CHANGE TO CALL FUNCTION DIRECTLY --> import !!!!!!!!!!
@@ -60,7 +63,7 @@ def main():
 # ------------------- END GOOGLE MAPS PART
         
     # Save dataframe back to Excel as Excel Sheet
-    df.to_excel(excel_file)
+    df.to_excel(file)
     print("Finished!")
 
 if __name__ == '__main__':  main()

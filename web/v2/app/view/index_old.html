@@ -1,0 +1,64 @@
+<html lang='en'>
+
+<head>
+  <meta charset='utf-8'>
+  <link rel='stylesheet' href='../static/style.css'>
+  <script src='../static/client.js'></script>
+
+</head>
+
+<body>
+
+  <div>
+    <div class='center'>
+      <div class='title'>Klassifizierung von Logistikstandorten anhand von Luftbildern</div>
+      <p>
+        Bitte laden Sie eine Luftbildaufnahme eines deutschen Standortes (Lager, Distributionszentrum, Filiale) hoch.
+        Das Modell klassifiziert den Standort in vier Klassen: Sehr Gut, Gut, Mittel und Schlecht. </br>
+        Die Klassifizierung beschreibt den Grad der Einfachheit einer Belieferung/Anfahrt.
+      </p>
+      <div class='content'>
+        <form>
+          <input id="address-input" type="text" name="address"
+            placeholder="Universitätsstraße 31, 93053 Regensburg"><br>
+          <input type="submit" onclick=";">
+        </form><br>
+        <div class='upload-label'>
+          <label id='upload-label'></label>
+        </div>
+        <div>
+          <div>
+            <iframe width="500" height="400" frameborder="0"
+              src="https://www.bing.com/maps/embed?h=400&w=500&cp=48.999430852927944~12.09469298809676&lvl=17&typ=s&sty=a&src=SHELL&FORM=MBEDV8"
+              scrolling="no">
+            </iframe>
+          </div>
+        </div>
+        <div class='analyze'>
+          <button id='analyze-button' class='analyze-button' type='button' onclick='analyze()'>Analysieren</button>
+        </div>
+        <div class='result-label'>
+          <label id='result-label'></label>
+          <p id='result-probabilities'></p>
+          <label id='probability-verygood'></label>
+          <label id='probability-good'></label>
+          <label id='probability-average'></label>
+          <label id='probability-bad'></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+<div class="footerWrap">
+  <div class="footer">
+    <div class="footerContent">
+      <p><strong>Disclaimer: </strong>Dieses Tool ist Bestandteil einer Masterarbeit am Lehrstuhl für Controlling &
+        Logistik der Universität Regensburg.</p>
+      <p>Unerlaubte Nutzung und Verbreitung ist nicht gestattet.</p>
+      <p>Copyright &copy; 2019 - <a href="mailto://jan-pascal.kunkler@stud.uni-regensburg.de">Jan Pascal Kunkler</a></p>
+    </div>
+  </div>
+</div>
+
+</html>

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8' />
+  <title>Place the geocoder input outside the map</title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.css' rel='stylesheet' />
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    #map {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+
+  <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.3.0/mapbox-gl-geocoder.min.js'>
+  </script>
+  <link rel='stylesheet'
+    href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.3.0/mapbox-gl-geocoder.css'
+    type='text/css' />
+  <style>
+    body {
+      font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+      color: rgba(0, 0, 0, 0.75);
+    }
+
+    .geocoder {
+      position: absolute;
+      z-index: 1;
+      width: 50%;
+      left: 50%;
+      margin-left: -25%;
+      top: 20px;
+    }
+
+    .submit-btn {
+      position: absolute;
+      z-index: 1;
+      left: 50%;
+      margin-left: -25%;
+      bottom: 20px;
+    }
+
+    .mapboxgl-ctrl-geocoder {
+      min-width: 100%;
+    }
+
+    .button {
+      background-color: #4CAF50;
+      /* Green */
+      border: none;
+      color: white;
+      padding: 16px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      -webkit-transition-duration: 0.4s;
+      /* Safari */
+      transition-duration: 0.4s;
+      cursor: pointer;
+    }
+
+    .button1 {
+      background-color: white;
+      color: rgba(0, 0, 0, 0.75);
+      border: 2px solid #4CAF50;
+    }
+
+    .button1:hover {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    #menu {
+      position: absolute;
+      background: #fff;
+      bottom: 0px;
+      right: 0px;
+      padding: 10px;
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    #building-button {
+      position: absolute;
+      bottom: 38px;
+      right: 0px;
+    }
+
+    #details-pane {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: #fff;
+      padding: 10px;
+      box-shadow: 0 0 10px 2px rgba(0, 0, 0, .1);
+      border-radius: 4px;
+      z-index: 1;
+      max-width: 20%;
+      font-size: 14px;
+      text-align: center;
+    }
+  </style>
+  <div id='map'></div>
+  <div id='geocoder' class='geocoder'></div>
+  <div id='menu'>
+    <input id='streets-v11' type='radio' name='rtoggle' value='streets' checked='checked'>
+    <label for='streets'>streets</label>
+    <input id='light-v10' type='radio' name='rtoggle' value='light'>
+    <label for='light'>light</label>
+    <input id='dark-v10' type='radio' name='rtoggle' value='dark'>
+    <label for='dark'>dark</label>
+    <input id='outdoors-v11' type='radio' name='rtoggle' value='outdoors'>
+    <label for='outdoors'>outdoors</label>
+    <!-- <input id='satellite-v9' type='radio' name='rtoggle' value='satellite'>
+    <label for='satellite'>satellite</label> -->
+  </div>
+  <div id="details-pane">
+    <div class='result-label'>
+      <label id='address-label' style="text-align: center; font-weight: bold;"></label>
+      <hr><br>
+      <label id='result-label'></label>
+      <p id='result-probabilities'></p>
+      <table align="center" style="width:100%;" id="output-table">
+        <tr>
+          <th>Kategorie</th>
+          <th>Wkt</th>
+        </tr>
+        <tr>
+          <td>Sehr Gut</td>
+          <td><label id='probability-verygood'></label></td>
+        </tr>
+        <tr>
+          <td>Gut</td>
+          <td><label id='probability-good'></label></td>
+        </tr>
+        <tr>
+          <td>Mittel</td>
+          <td><label id='probability-average'></label></td>
+        </tr>
+        <tr>
+          <td>Schlecht</td>
+          <td><label id='probability-bad'></label></td>
+        </tr>
+      </table>
+    </div>
+    <hr>
+    <a id="aerial-image-link" href="" target="_blank">
+      <img id="aerial-image-preview" style="max-width: 95%; max-height: 300px" src="">
+    </a>
+  </div>
+  <div id="building-button"><button class="button button1" onclick="addBuildings();">Gebäude hinzufügen</button></div>
+  <div id="submit-btn" class="submit-btn"><button class="button" onclick="analyze();">Analysieren</button></div>
+
+  <script>
+    var el = x => document.getElementById(x);
+
+    mapboxgl.accessToken =
+      'pk.eyJ1IjoianBrdW5rbGVyIiwiYSI6ImNqZzB0MjFjNDBiam8ycXFweGlnMThmbG8ifQ.vA1aff3tTCIX_zQsPj0cTg';
+    var map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v11',
+      center: [12.094425000000001, 48.998455500000006],
+      zoom: 16,
+      attributionControl: false,
+    });
+    map.addControl(new mapboxgl.AttributionControl(), 'top-left')
+
+    var geocoder = new MapboxGeocoder({
+      accessToken: mapboxgl.accessToken,
+      mapboxgl: mapboxgl
+    });
+
+    document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
+
+    function addBuildings() {
+      // Insert the layer beneath any symbol layer.
+      var layers = map.getStyle().layers;
+
+      var labelLayerId;
+      for (var i = 0; i < layers.length; i++) {
+        if (layers[i].type === 'symbol' && layers[i].layout['text-field']) {
+          labelLayerId = layers[i].id;
+          break;
+        }
+      }
+
+      map.addLayer({
+        'id': '3d-buildings',
+        'source': 'composite',
+        'source-layer': 'building',
+        'filter': ['==', 'extrude', 'true'],
+        'type': 'fill-extrusion',
+        'minzoom': 15,
+        'paint': {
+          'fill-extrusion-color': '#aaa',
+
+          // use an 'interpolate' expression to add a smooth transition effect to the
+          // buildings as the user zooms in
+          'fill-extrusion-height': [
+            "interpolate", ["linear"],
+            ["zoom"],
+            15, 0,
+            15.05, ["get", "height"]
+          ],
+          'fill-extrusion-base': [
+            "interpolate", ["linear"],
+            ["zoom"],
+            15, 0,
+            15.05, ["get", "min_height"]
+          ],
+          'fill-extrusion-opacity': .6
+        }
+      }, labelLayerId);
+
+      map.setPitch(45);
+      map.setBearing(-17.6);
+    };
+
+    var layerList = document.getElementById('menu');
+    var inputs = layerList.getElementsByTagName('input');
+
+    function switchLayer(layer) {
+      var layerId = layer.target.id;
+      map.setStyle('mapbox://styles/mapbox/' + layerId);
+      map.setPitch(0);
+      map.setBearing(0);
+    }
+
+    for (var i = 0; i < inputs.length; i++) {
+      inputs[i].onclick = switchLayer;
+    }
+
+
+    function analyze() {
+      var loc_input = document.getElementById("geocoder").getElementsByTagName("input");
+      var img_width = 300;
+      var img_height = 500;
+      var url =
+        'https://dev.virtualearth.net/REST/v1/Imagery/Map/Aerial/lat,lon/17?ms=width,height&od=1&c=de-DE&key=AijbFhynMi9YlUoC5sbBKfrfbnkcMJ34sYBEORQwbsviodnw8nTkkgh5se5COtMs';
+      if (loc_input[0].value == "") {
+        alert("Bitte geben Sie eine Adresse ein.");
+      } else {
+        var coords = geocoder.mapMarker.getLngLat();
+        new_url = url.replace("lat", coords["lat"])
+          .replace("lon", coords["lng"])
+          .replace("APIKEY", mapboxgl.accessToken)
+          .replace("width", img_width)
+          .replace("height", img_height);
+      };
+      console.log(new_url);
+
+      //el("analyze-button").innerHTML = "Analyzing...";
+      var xhr = new XMLHttpRequest();
+      var loc = window.location;
+      xhr.open("POST", `${loc.protocol}//${loc.hostname}:${loc.port}/analyze`,
+        true);
+      xhr.onerror = function () {
+        alert(xhr.responseText);
+      };
+      xhr.onload = function (e) {
+        if (this.readyState === 4) {
+          var response = JSON.parse(e.target.responseText);
+          el("address-label").innerHTML = loc_input[0].value;
+          el("result-label").innerHTML = `Eingestuft als ${response["result"]}`;
+          el("result-probabilities").innerHTML = `Mit folgenden Wahrscheinlichkeiten:`;
+          el("probability-verygood").innerHTML = `${response["Sehr_Gut"]}`;
+          el("probability-good").innerHTML = `${response["Gut"]}`;
+          el("probability-average").innerHTML = `${response["Mittel"]}`;
+          el("probability-bad").innerHTML = `${response["Schlecht"]}`;
+          el("aerial-image-preview").src = new_url;
+          el("aerial-image-link").href = new_url;
+          // alert(`Klassifiziert als ${response["result"]}`);
+        }
+        // el("analyze-button").innerHTML = "Analyze";
+      };
+
+      var fileData = new FormData();
+      fileData.append("file", new_url);
+      xhr.send(fileData);
+    }
+  </script>
+
+</body>
+
+</html>

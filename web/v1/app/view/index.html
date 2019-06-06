@@ -1,0 +1,55 @@
+<html lang='en'>
+<head>
+  <meta charset='utf-8'>
+  <link rel='stylesheet' href='../static/style.css'>
+  <script src='../static/client.js'></script>
+</head>
+<body>
+<div>
+  <div class='center'>
+    <div class='title'>Klassifizierung von Logistikstandorten anhand von Luftbildern</div>
+    <p>
+      Bitte laden Sie eine Luftbildaufnahme eines deutschen Standortes (Lager, Distributionszentrum, Filiale) hoch. Das Modell klassifiziert den Standort in vier Klassen: Sehr Gut, Gut, Mittel und Schlecht. </br>
+      Die Klassifizierung beschreibt den Grad der Einfachheit einer Belieferung/Anfahrt.
+    </p>
+    <div class='content'>
+      <div class='no-display'>
+        <input id='file-input'
+               class='no-display'
+               type='file'
+               name='file'
+               accept='image/*'
+               onchange='showPicked(this)'>
+      </div>
+      <button class='choose-file-button' type='button' onclick='showPicker()'>Luftbild auswählen</button>
+      <div class='upload-label'>
+        <label id='upload-label'>Keine Datei ausgewählt.</label>
+      </div>
+      <div>
+        <img id='image-picked' class='no-display' alt='Chosen Image' height='200'>
+      </div>
+      <div class='analyze'>
+        <button id='analyze-button' class='analyze-button' type='button' onclick='analyze()'>Analysieren</button>
+      </div>
+      <div class='result-label'>
+        <label id='result-label'></label>
+	<p id='result-probabilities'></p>
+	<label id='probability-verygood'></label>
+	<label id='probability-good'></label>
+	<label id='probability-average'></label>
+	<label id='probability-bad'></label>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+<div class="footerWrap">
+ <div class="footer">
+  <div class="footerContent">
+	  <p><strong>Disclaimer: </strong>Dieses Tool ist Bestandteil einer Masterarbeit am Lehrstuhl für Controlling & Logistik der Universität Regensburg.</p>
+	  <p>Unerlaubte Nutzung und Verbreitung ist nicht gestattet.</p>
+	  <p>Copyright &copy; 2019 - <a href="mailto://jan-pascal.kunkler@stud.uni-regensburg.de">Jan Pascal Kunkler</a></p>
+  </div>     
+</div>
+</div>
+</html>

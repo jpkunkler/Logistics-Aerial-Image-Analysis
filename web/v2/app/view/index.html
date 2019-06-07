@@ -3,10 +3,16 @@
 
 <head>
   <meta charset='utf-8' />
-  <title>Place the geocoder input outside the map</title>
+  <title>Distributionsentscheidung - Standortklassifikation</title>
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.js'></script>
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.css' rel='stylesheet' />
+
+  <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.3.0/mapbox-gl-geocoder.min.js'>
+  </script>
+  <link rel='stylesheet'
+    href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.3.0/mapbox-gl-geocoder.css'
+    type='text/css' />
 
   <style>
     body {
@@ -20,17 +26,7 @@
       bottom: 0;
       width: 100%;
     }
-  </style>
-</head>
 
-<body>
-
-  <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.3.0/mapbox-gl-geocoder.min.js'>
-  </script>
-  <link rel='stylesheet'
-    href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.3.0/mapbox-gl-geocoder.css'
-    type='text/css' />
-  <style>
     body {
       font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
       color: rgba(0, 0, 0, 0.75);
@@ -45,12 +41,15 @@
       top: 20px;
     }
 
-    .submit-btn {
+    #submit-area {
       position: absolute;
       z-index: 1;
+      bottom: 70px;
+      right: 25%;
       left: 50%;
-      margin-left: -25%;
-      bottom: 20px;
+      height: 50px;
+      width: 300px;
+      margin-left: -150px;
     }
 
     .mapboxgl-ctrl-geocoder {
@@ -62,16 +61,17 @@
       /* Green */
       border: none;
       color: white;
-      padding: 16px 32px;
+      padding: 12px 12px;
       text-align: center;
       text-decoration: none;
       display: inline-block;
-      font-size: 16px;
+      font-size: 12px;
       margin: 4px 2px;
       -webkit-transition-duration: 0.4s;
       /* Safari */
       transition-duration: 0.4s;
       cursor: pointer;
+      height: 50px;
     }
 
     .button1 {
@@ -112,8 +112,90 @@
       max-width: 20%;
       font-size: 14px;
       text-align: center;
+      visibility: hidden;
+    }
+
+    #footer-content {
+      position: absolute;
+      background: rgba(255, 255, 255, .25);
+      bottom: 0px;
+      right: 25%;
+      left: 50%;
+      width: 800px;
+      margin-left: -400px;
+    }
+
+    #footer-content p {
+      text-align: center;
+    }
+
+    #disclaimer {
+      font-size: 10px;
+      font-style: italic;
+      line-height: .9;
+    }
+
+    .hide {
+      display: none;
+    }
+
+    .submit-button {
+      display: block;
+      font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 1em;
+      letter-spacing: 1px;
+      height: 38px;
+      width: 100%;
+      line-height: 38px;
+      overflow: hidden;
+      background: #4dbecf;
+      border-radius: 3px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      border: 0;
+      cursor: pointer;
+      transition: all .3s ease;
+    }
+
+    .submit-button:hover,
+    .submit-button:focus {
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .submit-button.animated {
+      -webkit-animation: 0.75s short-press cubic-bezier(0.77, 0, 0.175, 1) forwards;
+      animation: 0.75s short-press cubic-bezier(0.77, 0, 0.175, 1) forwards;
+    }
+
+    .submit-button>span {
+      display: block;
+      color: white;
+      text-align: center;
+    }
+
+    .submit-button>span.pre-state-msg {
+      transition: all 0.7s cubic-bezier(0.77, 0, 0.175, 1);
+      transition-delay: .75s;
+    }
+
+    .submit-button.state-1 .pre-state-msg {
+      margin-top: -38px;
+    }
+
+    .submit-button.state-2 .pre-state-msg {
+      margin-top: -76px;
+    }
+
+    .small {
+      font-size: 9px;
+      line-height: 0.9;
     }
   </style>
+</head>
+
+<body>
+
   <div id='map'></div>
   <div id='geocoder' class='geocoder'></div>
   <div id='menu'>
@@ -158,12 +240,26 @@
       </table>
     </div>
     <hr>
+    <p>Verwendete Luftbildaufnahme:</p>
+    <p class="small">(Auf Bild klicken für Vollbild)</p>
     <a id="aerial-image-link" href="" target="_blank">
       <img id="aerial-image-preview" style="max-width: 95%; max-height: 300px" src="">
     </a>
   </div>
   <div id="building-button"><button class="button button1" onclick="addBuildings();">Gebäude hinzufügen</button></div>
-  <div id="submit-btn" class="submit-btn"><button class="button" onclick="analyze();">Analysieren</button></div>
+  <div id="submit-area"><button class="submit-button state-0">
+      <span class="pre-state-msg">Standort bestätigen</span>
+      <span class="current-state-msg hide">Analysiere...</span>
+      <span class="done-state-msg hide">Fertig!</span>
+    </button>
+  </div>
+  <div id="footer-content">
+    <p id="disclaimer"><strong>Disclaimer: </strong>Dieses Tool ist Bestandteil einer Masterarbeit am Lehrstuhl für
+      Controlling und
+      Logistik der Universität
+      Regensburg. Unerlaubte Nutzung und Verbreitung ist untersagt.</p>
+    <p>Copyright &copy; 2019 Jan Kunkler - Universität Regensburg</p>
+  </div>
 
   <script>
     var el = x => document.getElementById(x);
@@ -283,6 +379,7 @@
           el("probability-bad").innerHTML = `${response["Schlecht"]}`;
           el("aerial-image-preview").src = new_url;
           el("aerial-image-link").href = new_url;
+          el("details-pane").style.visibility = "visible";
           // alert(`Klassifiziert als ${response["result"]}`);
         }
         // el("analyze-button").innerHTML = "Analyze";
@@ -292,6 +389,30 @@
       fileData.append("file", new_url);
       xhr.send(fileData);
     }
+
+    // Animated Submit Button
+    const button = document.querySelector(".submit-button"),
+      stateMsg = document.querySelector(".pre-state-msg");
+
+    const updateButtonMsg = function () {
+      button.classList.add("state-1", "animated");
+
+      setTimeout(finalButtonMsg, 2000);
+      el("details-pane").style.visibility = 'hidden';
+    };
+
+    const finalButtonMsg = function () {
+      button.classList.add("state-2");
+
+      setTimeout(setInitialButtonState, 2000);
+      analyze();
+    };
+
+    const setInitialButtonState = function () {
+      button.classList.remove("state-1", "state-2", "animated");
+    };
+
+    button.addEventListener("click", updateButtonMsg);
   </script>
 
 </body>

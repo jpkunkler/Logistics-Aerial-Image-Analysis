@@ -191,6 +191,20 @@
       font-size: 9px;
       line-height: 0.9;
     }
+
+    .coordinates {
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      position: absolute;
+      bottom: 40px;
+      left: 10px;
+      padding: 5px 10px;
+      margin: 0;
+      font-size: 11px;
+      line-height: 18px;
+      border-radius: 3px;
+      display: none;
+    }
   </style>
 </head>
 
@@ -253,6 +267,7 @@
       <span class="done-state-msg hide">Fertig!</span>
     </button>
   </div>
+  <pre id='coordinates' class='coordinates'></pre>
   <div id="footer-content">
     <p id="disclaimer"><strong>Disclaimer: </strong>Dieses Tool ist Bestandteil einer Masterarbeit am Lehrstuhl für
       Controlling und
@@ -263,6 +278,7 @@
 
   <script>
     var el = x => document.getElementById(x);
+    var coordinates = el('coordinates');
 
     mapboxgl.accessToken =
       'pk.eyJ1IjoianBrdW5rbGVyIiwiYSI6ImNqZzB0MjFjNDBiam8ycXFweGlnMThmbG8ifQ.vA1aff3tTCIX_zQsPj0cTg';
@@ -277,6 +293,10 @@
 
     var geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
+      marker: {
+        color: "red",
+        draggable: true,
+      },
       mapboxgl: mapboxgl
     });
 
@@ -413,6 +433,22 @@
     };
 
     button.addEventListener("click", updateButtonMsg);
+
+    // display coordinates after marker was moved
+    function onDragEnd() {
+      var lngLat = geocoder.mapMarker.getLngLat();
+      coordinates.style.display = 'block';
+      coordinates.innerHTML = 'Longitude: ' + lngLat.lng + '<br />Latitude: ' + lngLat.lat;
+    }
+
+    function addCode() {
+      geocoder.mapMarker.on("dragend", onDragEnd);
+      onDragEnd();
+    }
+
+    // Workaround: we add our event handler to mapMarker only after it is created!
+    // mapMarker is only created when a result has been geocoded!
+    geocoder.on("result", addCode);
   </script>
 
 </body>

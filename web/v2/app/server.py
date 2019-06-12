@@ -81,7 +81,6 @@ async def analyze(request):
 @app.route('/api/v1.0/classify/{addr}')
 async def homepage(request):
     addr = request.path_params["addr"]
-    print(addr)
 
     # Check for required access token in URL
     try:

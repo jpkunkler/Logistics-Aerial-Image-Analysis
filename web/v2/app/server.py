@@ -82,16 +82,24 @@ async def analyze(request):
 async def homepage(request):
     addr = request.path_params["addr"]
     print(addr)
+
+    # Check for required access token in URL
     try:
         validation = request.query_params["access_token"]
-    except:
+    except: # return error if no token was supplied
         return JSONResponse({"message": "Please enter an access_token using ?access_token=YOUR_TOKEN."}, status_code=400)
 
+    # check if token is valid
     if validation in valid_api_keys:
         output = classifyLocation(*geocode(addr, mapbox_key))
-        return JSONResponse(output, status_code=200)
-    else:
-        return JSONResponse({"message": "Invalid Access Token."}, status_code=400)
+
+        # if our model returned None as result, an error occured
+        if output["result"] == None:
+            return JSONResponse(output, status_code = 400) # error retrieving location
+        else: # no error occured --> return result
+            return JSONResponse(output)
+    else: # token was supplied but not valid
+        return JSONResponse({"message": "Invalid Access Token."}, status_code = 400)
 
 def geocode(addr, api_key):
     """Use Mapbox Geocoding Service to retrieve coordinate pair for given address."""

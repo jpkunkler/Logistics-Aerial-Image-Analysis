@@ -100,7 +100,7 @@ async def analyze(request):
         df.to_csv(tmp.name)
         test = pd.read_csv(tmp.name)
         print(test.columns)
-        fpath = os.path.join(path, tmp.name)
+        fpath = os.path.join(Path(__file__).parent, tmp.name)
         print(fpath)
         return FileResponse(tmp.name, filename="test.csv")
 

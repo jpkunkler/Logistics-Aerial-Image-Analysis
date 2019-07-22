@@ -3,4 +3,8 @@ geckodriver\.log
 *.jpg
 data_dir/
 output/
+output_full/
+data_dir_full/
 *.pkl
+*.jpeg
+*.pth

@@ -13,3 +13,4 @@ data/Standorte.xlsx
 data/Standorte_geocoded.xlsx
 Standorte_labeled.xlsx
 apikey.txt
+.ipynb_checkpoints/

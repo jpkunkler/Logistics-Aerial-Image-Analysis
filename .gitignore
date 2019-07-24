@@ -1,4 +1,4 @@
-
+__pycache__/
 geckodriver\.log
 *.jpg
 data_dir/
@@ -12,4 +12,4 @@ data_dir_full/
 data/Standorte.xlsx
 data/Standorte_geocoded.xlsx
 Standorte_labeled.xlsx
-
+apikey.txt

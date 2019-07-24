@@ -17,8 +17,8 @@ import requests
 import tempfile
 import os
 
-export_file_url = 'https://www.dropbox.com/s/6bgq8t6yextloqp/export.pkl?raw=1'
-export_file_name = 'export.pkl'
+export_file_url = 'https://drive.google.com/uc?export=download&id=1gq-VlpstIx4PyM_DkxeMrIM3nDRCfUfx'
+export_file_name = 'masterarbeit.pkl'
 mapbox_key = "pk.eyJ1IjoianBrdW5rbGVyIiwiYSI6ImNqZzB0MjFjNDBiam8ycXFweGlnMThmbG8ifQ.vA1aff3tTCIX_zQsPj0cTg"
 
 valid_api_keys = ["4ab88b42-3a5c-4318-83a6-fca9d06efc4c"] # required to access classification API

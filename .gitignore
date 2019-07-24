@@ -2,6 +2,7 @@
 geckodriver\.log
 *.jpg
 data_dir/
+data_dir_sample/
 output/
 output_full/
 data_dir_full/
